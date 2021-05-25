@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.6.1
+# Version: 3.8.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -405,6 +405,14 @@ class TourCMS {
 			return($this->request('/c/bookings/search.xml?'.$params, $channel));
 	}
 
+	public function list_bookings($params = "", $channel = 0)
+	{
+        if($channel==0)
+            return($this->request('/p/bookings/list.xml?'.$params));
+        else
+            return($this->request('/c/bookings/list.xml?'.$params, $channel));
+	}
+
 	public function show_booking($booking, $channel) {
 		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
@@ -536,7 +544,7 @@ class TourCMS {
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
 
-  	public function start_new_agent_login($params, $channel)
+	public function start_new_agent_login($params, $channel)
 	{
 		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
 	}
@@ -545,19 +553,29 @@ class TourCMS {
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
+	
+	public function update_agent($update_data, $channel)
+	{
+		return ($this->request('/c/agents/update.xml', $channel, "POST", $update_data));
+	}
 
 	# Payments
-  	public function list_payments($params, $channel)
+	public function list_payments($params, $channel)
+	{
+		return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+	}
+  
+  	public function payworks_booking_payment_new($payment, $channel)
   	{
-        return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+  		return ($this->request('/c/booking/payment/payworks/new.xml', $channel, "POST", $payment));
   	}
 
 	# Staff members
-  	public function list_staff_members($channel)
-  	{
-        return($this->request('/c/staff/list.xml', $channel));
-  	}
-
+	public function list_staff_members($channel)
+	{
+		return($this->request('/c/staff/list.xml', $channel));
+	}
+  
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
 	{
